@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thyroid Gene Expression-based Progression Risk</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-container {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        .probability {
+            font-size: 1.5em;
+            color: #2c3e50;
+        }
+        .probability-value {
+            font-size: 1.8em;
+            color: #e67e22;
+            font-weight: bold;
+        }
+        .error {
+            color: #e74c3c;
+            background-color: #ffdddd;
+            padding: 15px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        @media (max-width: 600px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Thyroid Gene Expression-based Progression Risk</h1>
+    
+    <div class="form-container">
+        <form method="POST" action="/predict">
+            <div class="two-column">
+                {% for gene in gene_names %}
+                <div class="form-group">
+                    <label for="{{ gene }}">{{ gene }}Gene expression level:</label>
+                    <input type="number" id="{{ gene }}" name="{{ gene }}" step="0.0001" required>
+                </div>
+                {% endfor %}
+            </div>
+            <button type="submit">Predicting the risk of adverse pathological outcomes</button>
+        </form>
+    </div>
+
+    {% if probability %}
+    <div class="result">
+        <div class="probability">
+            <strong>Probability of adverse pathological outcomes:</strong> <span class="probability-value">{{ probability }}</span>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <div class="error">
+        <h3>错误: {{ error }}</h3>
+    </div>
+    {% endif %}
+</body>
+</html>
